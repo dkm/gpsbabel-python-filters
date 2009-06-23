@@ -1,0 +1,16 @@
+Source: gpsbabel-python-filters
+Section: libs
+Priority: extra
+Maintainer: Marc Poulhiès <dkm@kataplop.net>
+Build-Depends: cdbs, debhelper (>= 7), python-support, python-all-dev
+Standards-Version: 3.8.1
+Homepage: http://kataplop.net/pub/loisirs/gpspython
+
+Package: python-gpsbabel-filters
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, python (>=2.5), gpsbabel, python-igc2kmz
+Description: python module for use with gpsbabel
+ The modules included in this packages are used as filters
+ with gpsbabel. The pykml_template is a simple template. The 
+ igc2kmzbridge is a more complex one that bridges gpsbabel and
+ igc2kmz
