@@ -31,9 +31,11 @@ class Track:
             v = acc[i]
             
             r.append(float(v-zero)/u)
+	return r
 
 
     def __init__(self, usewii=False):
+	self.usewii = usewii
         self.sio = cStringIO.StringIO()
         self.sio.write('<?xml version="1.0" encoding="UTF-8" standalone="no" ?>')
 
@@ -42,15 +44,15 @@ class Track:
                                           'version': '1.1',
                                           'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
                                           'xsi:schemaLocation': 'http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd'})
-        self.track = ET.SubElement(gpxroot, "trk")
-        ET.SubElement(track, "name").text = "Test GPX"
-        self.trkseg = ET.SubElement(track, "trkseg")
+        self.track = ET.SubElement(self.gpxroot, "trk")
+        ET.SubElement(self.track, "name").text = "Test GPX"
+        self.trkseg = ET.SubElement(self.track, "trkseg")
 
         self.wm = None
 
         if self.usewii :
             import cwiid
-            self.wiimote_hwaddr = "00:1D:BC:3B:2D:C3"
+            self.wiimote_hwaddr = "00:1C:BE:2A:3C:24"
             print "You have a few secs to sync with wm..."
             self.wm = cwiid.Wiimote(self.wiimote_hwaddr)
             if self.wm != None:
@@ -68,7 +70,6 @@ class Track:
     def getResult(self):
         tree = ET.ElementTree(self.gpxroot)
         tree.write(self.sio)
-
         return self.sio.getvalue()
     
     def setComputedTrackData(self, distance_meters, 
@@ -82,17 +83,18 @@ class Track:
     def addPoint(self, lati, longi, 
                  alt, creat, speed, vspeed):
 
-        trkpt = ET.SubElement(self.trkseg, "trkpt", {'lat': lati,
-                                                     'lon': longi})
-        ET.SubElement(self.tkrpt, "ele").text = alt
-        ET.SubElement(self.trkpt, "time").text = creat
+        trkpt = ET.SubElement(self.trkseg, "trkpt", {'lat': str(lati),
+                                                     'lon': str(longi)})
+        ET.SubElement(trkpt, "ele").text = str(alt)
+        ET.SubElement(trkpt, "time").text = str(creat)
         
         if self.wm != None:
             st = self.wm.state
             acc_n = self.acc_normalize(st['acc'])
 
             ext = ET.SubElement(trkpt, "extensions")
-            acc = ET.SubElement(ext, "accelerations", {'x': acc_n[0],
-                                                       'y': acc_n[1],
-                                                       'z': acc_n[2]})
+            acc = ET.SubElement(ext, "accelerations", {'x': str(acc_n[0]),
+                                                       'y': str(acc_n[1]),
+                                                       'z': str(acc_n[2])})
         
+        ET.dump(trkpt)
