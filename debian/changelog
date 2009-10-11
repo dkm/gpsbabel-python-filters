@@ -1,3 +1,9 @@
+gpsbabel-python-filters (0.2git091011-1~ppa1) jaunty; urgency=low
+
+  * fixed gpx
+
+ -- Marc Poulhiès <dkm@kataplop.net>  Sun, 11 Oct 2009 13:36:24 +0200
+
 gpsbabel-python-filters (0.2-1~ppa1) jaunty; urgency=low
 
   * add gpx output
