@@ -22,24 +22,16 @@ import os
 import os.path
 import sys
 
-import airspace.parser
-import airspace.util
-
 # TODO:
 # - get oair file from cli args
 # - use a serialization instead of parsing (check shapefile features)
 
 class Track:
     def __init__(self):
-        p = airspace.parser.OAIRParser("local.oair")
-        p.parse()
-
-        self.zones = [g.finish() for g in p.zones]
-
-        self.flight_linestring = airspace.util.createLineString()
+         self.points = []
 
     def getResult(self):
-        return ""
+        return "\n".join(self.points)
     
     def setComputedTrackData(self, distance_meters, 
                              max_alt, min_alt, 
@@ -51,7 +43,5 @@ class Track:
 
     def addPoint(self, lat, lon, 
                  alt, creat, speed, vspeed):
-        ls.AddPoint(float(lon), 
-                    float(lat),
-                    float(ele))
+        self.points.append("%f %f %f" %(float(lon), float(lat), float(alt)))
 
